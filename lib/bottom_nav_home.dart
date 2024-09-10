@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'Crop Info/crop_info_screen.dart';
 import 'Home/home_screen.dart';
+import 'Map/map_screen.dart';
 import 'Settings/settings_screen.dart';
 import 'Weather/weather_screen.dart';
 
@@ -18,6 +19,7 @@ class _BottomNavHomeState extends State<BottomNavHome> {
     HomeScreen(),
     CropInfoScreen(),
     WeatherScreen(),
+    MapScreen(),
     SettingsScreen(),
   ];
 
@@ -52,6 +54,10 @@ class _BottomNavHomeState extends State<BottomNavHome> {
           BottomNavigationBarItem(
             icon: Icon(Icons.wb_sunny),
             label: 'Weather',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: 'Map',  // Map label added here
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
