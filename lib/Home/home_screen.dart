@@ -7,7 +7,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Text(
-        'Welcome to Agri App!',
+        'Welcome to AgroNova App!',
         style: TextStyle(fontSize: 24),
       ),
     );

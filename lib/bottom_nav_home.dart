@@ -37,7 +37,7 @@ class _BottomNavHomeState extends State<BottomNavHome> {
       // ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,  // Set the bottom navigation bar color to black
+        backgroundColor: Colors.redAccent,  // Set the bottom navigation bar color to black
         selectedItemColor: Colors.green, // Color for selected item
         unselectedItemColor: Colors.grey, // Color for unselected items
         currentIndex: _currentIndex,

@@ -12,7 +12,7 @@ class AgriApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AgriNova',
+      title: 'AgroNova',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),

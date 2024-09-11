@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'map_layer_selection.dart';
+import 'map_area_info.dart';
+import 'utils.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -11,11 +15,14 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  List<LatLng> polygonPoints = [];
   List<Marker> markers = [];
   MapController mapController = MapController();
   String currentLayer = 'Street';
+  double area = 0.0;
+  double perimeter = 0.0;
 
-// Function to add markers dynamically based on user's tap
+  // Function to add markers dynamically based on user's tap
   void _handleTap(LatLng latlng) {
     setState(() {
       markers.add(
@@ -23,22 +30,33 @@ class _MapScreenState extends State<MapScreen> {
           width: 80.0,
           height: 80.0,
           point: latlng,
-          child: Container(
-            child: const Icon(
-              Icons.location_on,
-              color: Colors.red,
-              size: 40.0,
-            ),
+          child: const Icon(
+            Icons.location_on,
+            color: Colors.red,
+            size: 40.0,
           ),
         ),
       );
+      polygonPoints.add(latlng);
+
+      if (polygonPoints.length > 2) {
+        area = calculatePolygonArea(polygonPoints);
+        perimeter = calculatePolygonPerimeter(polygonPoints);
+      }
     });
   }
 
-
-  // Function to get user's current location
+  // Function to get user's current location with permission handling
   Future<void> _getCurrentLocation() async {
     try {
+      PermissionStatus permission = await Permission.location.status;
+      if (permission.isDenied || permission.isRestricted) {
+        PermissionStatus newPermission = await Permission.location.request();
+        if (!newPermission.isGranted) {
+          throw 'Location permission denied by user.';
+        }
+      }
+
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       LatLng userLocation = LatLng(position.latitude, position.longitude);
@@ -49,15 +67,19 @@ class _MapScreenState extends State<MapScreen> {
             width: 80.0,
             height: 80.0,
             point: userLocation,
-            child: Container(
-              child: const Icon(
-                Icons.my_location,
-                color: Colors.blue,
-                size: 40.0,
-              ),
+            child: const Icon(
+              Icons.my_location,
+              color: Colors.blue,
+              size: 40.0,
             ),
           ),
         );
+        polygonPoints.add(userLocation);
+
+        if (polygonPoints.length > 2) {
+          area = calculatePolygonArea(polygonPoints);
+          perimeter = calculatePolygonPerimeter(polygonPoints);
+        }
       });
 
       mapController.move(userLocation, 15.0);
@@ -74,7 +96,7 @@ class _MapScreenState extends State<MapScreen> {
           FlutterMap(
             mapController: mapController,
             options: MapOptions(
-              initialCenter: const LatLng(51.509865, -0.118092), // Default location (London)
+              initialCenter: const LatLng(51.509865, -0.118092),
               initialZoom: 13.0,
               onTap: (tapPosition, latlng) => _handleTap(latlng),
             ),
@@ -87,44 +109,35 @@ class _MapScreenState extends State<MapScreen> {
                     : 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
                 subdomains: const ['a', 'b', 'c'],
               ),
+              if (polygonPoints.isNotEmpty)
+                PolygonLayer(
+                  polygons: [
+                    Polygon(
+                      points: polygonPoints,
+                      borderColor: Colors.blue,
+                      borderStrokeWidth: 3.0,
+                      color: Colors.blue.withOpacity(0.2),
+                    ),
+                  ],
+                ),
               MarkerLayer(
                 markers: markers,
               ),
             ],
           ),
-          Positioned(
-            top: 50,
-            right: 10,
-            child: Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      currentLayer = 'Street';
-                    });
-                  },
-                  child: const Text('Street'),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      currentLayer = 'Satellite';
-                    });
-                  },
-                  child: const Text('Satellite'),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      currentLayer = 'Hybrid';
-                    });
-                  },
-                  child: const Text('Hybrid'),
-                ),
-              ],
-            ),
+          // Add the Layer Selection bar from a separate file
+          MapLayerSelection(
+            currentLayer: currentLayer,
+            onLayerChanged: (layer) {
+              setState(() {
+                currentLayer = layer;
+              });
+            },
+          ),
+          // Add the Area Info display from a separate file
+          MapAreaInfo(
+            area: area,
+            perimeter: perimeter,
           ),
         ],
       ),
@@ -141,6 +154,9 @@ class _MapScreenState extends State<MapScreen> {
             onPressed: () {
               setState(() {
                 markers.clear();
+                polygonPoints.clear();
+                area = 0.0;
+                perimeter = 0.0;
               });
             },
             backgroundColor: Colors.red,
