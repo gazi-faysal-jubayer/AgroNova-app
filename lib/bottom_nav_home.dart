@@ -16,11 +16,11 @@ class BottomNavHome extends StatefulWidget {
 class _BottomNavHomeState extends State<BottomNavHome> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    HomeScreen(),
-    CropInfoScreen(),
-    WeatherScreen(),
-    MapScreen(),
-    SettingsScreen(),
+    const HomeScreen(),
+    const CropInfoScreen(),
+    const WeatherScreen(),
+    const MapScreen(),
+    const SettingsScreen(),
   ];
 
   void onTabTapped(int index) {
@@ -32,9 +32,9 @@ class _BottomNavHomeState extends State<BottomNavHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Agri App"),
-      ),
+      // appBar: AppBar(
+      //   title: const Text("Agri App"),
+      // ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,  // Set the bottom navigation bar color to black

@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 import 'bottom_nav_home.dart';
 
 void main() {
-  runApp(AgriApp());
+  runApp(const AgriApp());
 }
 
 class AgriApp extends StatelessWidget {
+  const AgriApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Agri App',
+      title: 'AgriNova',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: BottomNavHome(),
+      home: const BottomNavHome(),
     );
   }
 }
