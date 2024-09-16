@@ -1,5 +1,7 @@
 import 'package:latlong2/latlong.dart';
 import 'dart:math';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // Function to calculate the area of the polygon
 double calculatePolygonArea(List<LatLng> points) {
@@ -33,4 +35,21 @@ double calculatePolygonPerimeter(List<LatLng> points) {
   }
 
   return perimeter; // Perimeter in meters
+}
+
+// Function to fetch soil data from SoilGrids API
+Future<Map<String, dynamic>> fetchSoilData(LatLng point) async {
+  final url = 'https://rest.soilgrids.org/query?lon=${point.longitude}&lat=${point.latitude}'; // Adjust URL as needed
+
+  try {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body); // Parse the JSON response
+    } else {
+      throw 'Failed to load soil data';
+    }
+  } catch (e) {
+    print("Error fetching soil data: $e");
+    return {};
+  }
 }

@@ -3,15 +3,22 @@ import 'package:flutter/material.dart';
 class MapAreaInfo extends StatelessWidget {
   final double area;
   final double perimeter;
+  final Map<String, dynamic> soilData; // Add a parameter for soil data
 
   const MapAreaInfo({
     required this.area,
     required this.perimeter,
+    required this.soilData, // Initialize the new parameter
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Extract soil properties with default values
+    final ph = soilData['ph'] ?? 'N/A';
+    final organicCarbon = soilData['organic_carbon'] ?? 'N/A';
+    final otherProperties = soilData['other_properties'] ?? 'N/A'; // Add other properties as needed
+
     return Positioned(
       bottom: 30,
       left: 10,
@@ -68,6 +75,31 @@ class MapAreaInfo extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
+            Text(
+              'Soil Information:',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'pH: $ph',
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+              ),
+            ),
+            Text(
+              'Organic Carbon: $organicCarbon',
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+              ),
+            ),
+            // Add more properties as needed
           ],
         ),
       ),

@@ -21,9 +21,10 @@ class _MapScreenState extends State<MapScreen> {
   String currentLayer = 'Street';
   double area = 0.0;
   double perimeter = 0.0;
+  Map<String, dynamic> soilData = {}; // Store soil data
 
   // Function to add markers dynamically based on user's tap
-  void _handleTap(LatLng latlng) {
+  void _handleTap(LatLng latlng) async {
     setState(() {
       markers.add(
         Marker(
@@ -43,6 +44,12 @@ class _MapScreenState extends State<MapScreen> {
         area = calculatePolygonArea(polygonPoints);
         perimeter = calculatePolygonPerimeter(polygonPoints);
       }
+    });
+
+    // Fetch and update soil data
+    final fetchedSoilData = await fetchSoilData(latlng);
+    setState(() {
+      soilData = fetchedSoilData;
     });
   }
 
@@ -125,7 +132,6 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ],
           ),
-          // Add the Layer Selection bar from a separate file
           MapLayerSelection(
             currentLayer: currentLayer,
             onLayerChanged: (layer) {
@@ -134,10 +140,10 @@ class _MapScreenState extends State<MapScreen> {
               });
             },
           ),
-          // Add the Area Info display from a separate file
           MapAreaInfo(
             area: area,
             perimeter: perimeter,
+            soilData: soilData, // Pass soil data to MapAreaInfo
           ),
         ],
       ),
@@ -157,6 +163,7 @@ class _MapScreenState extends State<MapScreen> {
                 polygonPoints.clear();
                 area = 0.0;
                 perimeter = 0.0;
+                soilData = {}; // Clear soil data
               });
             },
             backgroundColor: Colors.red,
