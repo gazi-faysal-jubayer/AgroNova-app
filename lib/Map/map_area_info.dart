@@ -1,82 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class MapAreaInfo extends StatelessWidget {
   final double area;
   final double perimeter;
-  final Map<String, dynamic> soilData; // Add a parameter for soil data
+  final Map<String, dynamic> soilData;
 
   const MapAreaInfo({
     required this.area,
     required this.perimeter,
-    required this.soilData, // Initialize the new parameter
+    required this.soilData,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Extract soil properties with default values
-    final ph = soilData['ph'] ?? 'N/A';
+    print(soilData);
+    final ph = soilData['properties']['layers'][0]['depths'][0]['values']['mean'] ?? 'N/A';
     final organicCarbon = soilData['organic_carbon'] ?? 'N/A';
-    final otherProperties = soilData['other_properties'] ?? 'N/A'; // Add other properties as needed
+    final otherProperties = soilData['other_properties'] ?? 'N/A';
 
-    return Positioned(
-      bottom: 30,
-      left: 10,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 10.0,
-              offset: const Offset(0, 4),
+    return SlidingUpPanel(
+      minHeight: 100, // Height when collapsed
+      maxHeight: 400, // Height when fully expanded
+      panel: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Swipe up for more info',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.area_chart,
-                  color: Colors.blue,
-                  size: 24.0,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Area: ${area.toStringAsFixed(2)} sq meters',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(
-                  Icons.linear_scale,
-                  color: Colors.green,
-                  size: 24.0,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Perimeter: ${perimeter.toStringAsFixed(2)} meters',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
+          ),
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
               'Soil Information:',
               style: const TextStyle(
                 fontSize: 18,
@@ -84,24 +44,40 @@ class MapAreaInfo extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              'pH: $ph',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black87,
-              ),
-            ),
-            Text(
-              'Organic Carbon: $organicCarbon',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black87,
-              ),
-            ),
-            // Add more properties as needed
-          ],
+          ),
+          ListTile(
+            leading: const Icon(Icons.ac_unit),
+            title: Text('pH: $ph'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.cloud),
+            title: Text('Organic Carbon: $organicCarbon'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.bubble_chart),
+            title: Text('Other properties: $otherProperties'),
+          ),
+        ],
+      ),
+      collapsed: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24.0),
+            topRight: Radius.circular(24.0),
+          ),
         ),
+        child: Center(
+          child: Text(
+            'Area: ${area.toStringAsFixed(2)} sq meters\nPerimeter: ${perimeter.toStringAsFixed(2)} meters',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(24.0),
+        topRight: Radius.circular(24.0),
       ),
     );
   }

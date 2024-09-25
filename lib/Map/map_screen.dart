@@ -50,6 +50,7 @@ class _MapScreenState extends State<MapScreen> {
     final fetchedSoilData = await fetchSoilData(latlng);
     setState(() {
       soilData = fetchedSoilData;
+      print(soilData['properties']['layers'][0]['depths'][0]['values']['mean']);
     });
   }
 

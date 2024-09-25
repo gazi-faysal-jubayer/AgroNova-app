@@ -39,12 +39,15 @@ double calculatePolygonPerimeter(List<LatLng> points) {
 
 // Function to fetch soil data from SoilGrids API
 Future<Map<String, dynamic>> fetchSoilData(LatLng point) async {
-  final url = 'https://rest.soilgrids.org/query?lon=${point.longitude}&lat=${point.latitude}'; // Adjust URL as needed
-
+  Map<String, dynamic> soilData;
+  final url = 'https://rest.isric.org/soilgrids/v2.0/properties/query?lon=${point.longitude}&lat=${point.latitude}&property=phh2o&depth=0-5cm&depth=0-30cm&depth=5-15cm&depth=15-30cm&depth=30-60cm&depth=60-100cm&depth=100-200cm&value=Q0.05&value=Q0.5&value=Q0.95&value=mean&value=uncertainty';
+  print(url);
   try {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      return jsonDecode(response.body); // Parse the JSON response
+      print(response.body);
+      soilData = jsonDecode(response.body);
+      return soilData; // Parse the JSON response
     } else {
       throw 'Failed to load soil data';
     }
