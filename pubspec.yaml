@@ -24,6 +24,8 @@ dependencies:
   permission_handler: ^11.0.1
   http: ^1.2.2
   sliding_up_panel: ^2.0.0+1
+  weather_icons: ^3.0.0
+
 
 
   # The following adds the Cupertino Icons font to your application.
