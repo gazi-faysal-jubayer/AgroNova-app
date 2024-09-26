@@ -1,3 +1,4 @@
+import 'package:agro_nova_app/bottom_nav_home.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -100,7 +101,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     // Navigate to the home page
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(builder: (context) => BottomNavHome()),
                     );
                   }
                 },
@@ -121,19 +122,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-// Dummy HomePage widget; replace with your actual home page
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Home Page")),
-      body: Center(
-        child: Text("Welcome to the Home Page!", style: TextStyle(fontSize: 24)),
       ),
     );
   }

@@ -1,6 +1,6 @@
+import 'package:agro_nova_app/onboarding.dart';
 import 'package:flutter/material.dart';
 
-import 'bottom_nav_home.dart';
 
 void main() {
   runApp(const AgriApp());
@@ -16,7 +16,7 @@ class AgriApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const BottomNavHome(),
+      home: OnboardingScreen(),
     );
   }
 }
