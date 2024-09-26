@@ -89,33 +89,38 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // Next/Get Started button section
               SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_currentPageIndex < _onboardingData.length - 1) {
-                    // Move to the next page
-                    _pageController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  } else {
-                    // Navigate to the home page
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => BottomNavHome()),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,  // Set button width to 80% of the screen width
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_currentPageIndex < _onboardingData.length - 1) {
+                      // Move to the next page
+                      _pageController.nextPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    } else {
+                      // Navigate to the home page
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => BottomNavHome()),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    backgroundColor: const Color.fromRGBO(32, 160, 144, 1),  // Change the button color to green
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                   ),
-                ),
-                child: Text(
-                  _currentPageIndex < _onboardingData.length - 1 ? "Next" : "Get Started",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  child: Text(
+                    _currentPageIndex < _onboardingData.length - 1 ? "Next" : "Get Started",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,  // Change the text color to white
+                    ),
                   ),
                 ),
               ),
@@ -126,3 +131,4 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 }
+
