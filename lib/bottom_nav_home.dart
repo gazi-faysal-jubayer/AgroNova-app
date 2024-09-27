@@ -18,7 +18,7 @@ class _BottomNavHomeState extends State<BottomNavHome> {
   final List<Widget> _pages = [
     const HomeScreen(),
     const CropInfoScreen(),
-    const WeatherScreen(),
+    WeatherScreen(),
     const MapScreen(),
     const SettingsScreen(),
   ];
