@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final soilgrid = soilgridFromJson(jsonString);
-
 import 'dart:convert';
 
 Soilgrid soilgridFromJson(String str) => Soilgrid.fromJson(json.decode(str));
@@ -99,7 +95,7 @@ class Layer {
 class Depth {
   Range range;
   String label;
-  Map<String, int> values;
+  Map<String, num> values;
 
   Depth({
     required this.range,
@@ -110,7 +106,7 @@ class Depth {
   factory Depth.fromJson(Map<String, dynamic> json) => Depth(
     range: Range.fromJson(json["range"]),
     label: json["label"],
-    values: Map.from(json["values"]).map((k, v) => MapEntry<String, int>(k, v)),
+    values: Map.from(json["values"]).map((k, v) => MapEntry<String, num>(k, v)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -145,7 +141,7 @@ class Range {
 }
 
 class UnitMeasure {
-  int conversionFactor;
+  num conversionFactor;
   String mappedUnits;
   String targetUnits;
   String uncertaintyUnit;

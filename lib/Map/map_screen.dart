@@ -3,6 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:http/http.dart' as http;
+import '../Model/soilgrid_data_model.dart';
 import 'map_layer_selection.dart';
 import 'map_area_info.dart';
 import 'utils.dart';
@@ -21,9 +23,9 @@ class _MapScreenState extends State<MapScreen> {
   String currentLayer = 'Street';
   double area = 0.0;
   double perimeter = 0.0;
-  Map<String, dynamic> soilData = {}; // Store soil data
+  Soilgrid? soilData;
+  bool isLoading = false;
 
-  // Function to add markers dynamically based on user's tap
   void _handleTap(LatLng latlng) async {
     setState(() {
       markers.add(
@@ -44,15 +46,34 @@ class _MapScreenState extends State<MapScreen> {
         area = calculatePolygonArea(polygonPoints);
         perimeter = calculatePolygonPerimeter(polygonPoints);
       }
+      isLoading = true;
     });
 
-    // Fetch and update soil data
-    final fetchedSoilData = await fetchSoilData(latlng);
-    setState(() {
-      soilData = fetchedSoilData;
-      print(soilData['properties']['layers'][0]['depths'][0]['values']['mean']);
-    });
+    await _fetchSoilData(latlng);
   }
+
+  Future<void> _fetchSoilData(LatLng latlng) async {
+    final url = Uri.parse(
+        'https://api-test.openepi.io/soil/property?lon=${latlng.longitude}&lat=${latlng.latitude}&depths=0-5cm&depths=100-200cm&properties=bdod&properties=phh2o&values=mean&values=Q0.05');
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        setState(() {
+          soilData = soilgridFromJson(response.body);
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load soil data');
+      }
+    } catch (e) {
+      print('Error fetching soil data: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
 
   // Function to get user's current location with permission handling
   Future<void> _getCurrentLocation() async {
@@ -144,7 +165,8 @@ class _MapScreenState extends State<MapScreen> {
           MapAreaInfo(
             area: area,
             perimeter: perimeter,
-            soilData: soilData, // Pass soil data to MapAreaInfo
+            soilData: soilData,
+            isLoading: isLoading,
           ),
         ],
       ),
@@ -164,7 +186,7 @@ class _MapScreenState extends State<MapScreen> {
                 polygonPoints.clear();
                 area = 0.0;
                 perimeter = 0.0;
-                soilData = {}; // Clear soil data
+                soilData = null; // Clear soil data
               });
             },
             backgroundColor: Colors.red,

@@ -1,7 +1,10 @@
+// utils.dart
+
 import 'package:latlong2/latlong.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../Model/soilgrid_data_model.dart';
 
 // Function to calculate the area of the polygon
 double calculatePolygonArea(List<LatLng> points) {
@@ -37,22 +40,23 @@ double calculatePolygonPerimeter(List<LatLng> points) {
   return perimeter; // Perimeter in meters
 }
 
-// Function to fetch soil data from SoilGrids API
-Future<Map<String, dynamic>> fetchSoilData(LatLng point) async {
-  Map<String, dynamic> soilData;
-  final url = 'https://rest.isric.org/soilgrids/v2.0/properties/query?lon=${point.longitude}&lat=${point.latitude}&property=phh2o&depth=0-5cm&depth=0-30cm&depth=5-15cm&depth=15-30cm&depth=30-60cm&depth=60-100cm&depth=100-200cm&value=Q0.05&value=Q0.5&value=Q0.95&value=mean&value=uncertainty';
-  print(url);
+Future<Soilgrid?> fetchSoilData(LatLng latlng) async {
+  final url =
+      'https://api-test.openepi.io/soil/property?lon=${latlng.longitude}&lat=${latlng.latitude}&depths=0-5cm&depths=100-200cm&properties=bdod&properties=phh2o&values=mean&values=Q0.05';
+
   try {
     final response = await http.get(Uri.parse(url));
+
     if (response.statusCode == 200) {
-      print(response.body);
-      soilData = jsonDecode(response.body);
-      return soilData; // Parse the JSON response
+      // Parse the JSON response into Soilgrid model
+      return soilgridFromJson(response.body);
     } else {
-      throw 'Failed to load soil data';
+      // Handle error
+      print('Failed to fetch soil data: ${response.statusCode}');
+      return null;
     }
   } catch (e) {
-    print("Error fetching soil data: $e");
-    return {};
+    print('Error fetching soil data: $e');
+    return null;
   }
 }

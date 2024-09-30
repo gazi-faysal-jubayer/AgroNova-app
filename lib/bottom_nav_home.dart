@@ -4,7 +4,8 @@ import 'Crop Info/crop_info_screen.dart';
 import 'Home/home_screen.dart';
 import 'Map/map_screen.dart';
 import 'Settings/settings_screen.dart';
-import 'Weather/weather_screen.dart';
+import 'Weather/screens/home_page.dart';
+
 
 class BottomNavHome extends StatefulWidget {
   const BottomNavHome({super.key});
