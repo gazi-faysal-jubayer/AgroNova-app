@@ -28,6 +28,8 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   weather_icons: ^3.0.0
   cupertino_icons: ^1.0.6
+  google_generative_ai: ^0.4.6
+  flutter_markdown: ^0.7.3+2
 
 dev_dependencies:
   flutter_test:
@@ -65,9 +67,7 @@ flutter:
   assets:
     - assets/weather/
     - assets/icons/
-    - assets/image/onboarding-1.png
-    - assets/image/onboarding-2.png
-    - assets/image/onboarding-3.png
+    - assets/image/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
