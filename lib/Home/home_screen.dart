@@ -1,5 +1,5 @@
+import 'package:agro_nova_app/Home/NASA%20missions/nasa_missions.dart';
 import 'package:flutter/material.dart';
-
 import 'farminova_card.dart';
 import 'home_card.dart';
 
@@ -22,7 +22,10 @@ class HomeScreen extends StatelessWidget {
                 imagePath: 'assets/image/nasa_mission.png',
                 logoPath: 'assets/image/nasa_logo.png', // Your NASA logo path
                 onTap: () {
-                  // Handle tap action here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NasaMissions()),
+                  );
                 },
                 gradientColors: [Colors.transparent, Colors.cyan],
               ),
