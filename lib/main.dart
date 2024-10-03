@@ -13,6 +13,7 @@ class AgriApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AgroNova',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),

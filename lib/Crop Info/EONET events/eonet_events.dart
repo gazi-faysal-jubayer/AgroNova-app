@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../Model/eonet_data_model.dart';
 import 'eonet_event_details.dart';
 
-
 class EonetEvents extends StatefulWidget {
   const EonetEvents({super.key});
 
@@ -24,68 +23,75 @@ class _EonetEventsState extends State<EonetEvents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("NASA EONET Events")),
+      appBar: AppBar(
+        title: const Text("Recent Disaster Events", style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.teal,
+      ),
       body: FutureBuilder<Welcome>(
         future: futureEvents,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      snapshot.data!.title,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: [
+                  Text(
+                    snapshot.data!.title,
+                    style: const TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.teal,
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      snapshot.data!.description,
-                      style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    snapshot.data!.description,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Events:",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Events:",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    // Displaying event list with details in a scrollable format
-                    SingleChildScrollView(
-                      child: Column(
-                        children: snapshot.data!.events.map((event) {
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: ListTile(
-                              title: Text(event.title),
-                              subtitle: Text(
-                                event.geometries.isNotEmpty
-                                    ? event.geometries[0].date.toString()
-                                    : "No description available",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              trailing: const Icon(Icons.arrow_forward_ios),
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EventDetails(event: event),
-                                ),
-                              ),
+                  ),
+                  const SizedBox(height: 10),
+                  // Displaying event list with details in a scrollable format
+                  Column(
+                    children: snapshot.data!.events.map((event) {
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            event.title,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                            event.geometries.isNotEmpty
+                                ? event.geometries[0].date.toString()
+                                : "No date available",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: const Icon(Icons.arrow_forward_ios),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  EventDetails(event: event),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-
-                  ],
-                ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
             );
           } else if (snapshot.hasError) {

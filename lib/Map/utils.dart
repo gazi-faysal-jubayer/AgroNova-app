@@ -3,7 +3,6 @@
 import 'package:latlong2/latlong.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../Model/soilgrid_data_model.dart';
 
 // Function to calculate the area of the polygon

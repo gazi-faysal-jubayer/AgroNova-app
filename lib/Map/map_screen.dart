@@ -10,40 +10,39 @@ import 'map_area_info.dart';
 import 'utils.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  const MapScreen({Key? key}) : super(key: key);
 
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
+  final MapController mapController = MapController();
   List<LatLng> polygonPoints = [];
   List<Marker> markers = [];
-  MapController mapController = MapController();
   String currentLayer = 'Street';
   double area = 0.0;
   double perimeter = 0.0;
   Soilgrid? soilData;
   bool isLoading = false;
-  bool isPolygonMode = false; // New flag to toggle polygon mode
+  bool isPolygonMode = false;
 
-  void _handleTap(LatLng latlng) async {
+  void _handleTap(TapPosition tapPosition, LatLng point) {
     if (isPolygonMode) {
-      // If in polygon mode, add points to polygon
       setState(() {
+        polygonPoints.add(point);
         markers.add(
           Marker(
             width: 80.0,
             height: 80.0,
-            point: latlng,
-            child: const Icon(
+            point: point,
+            child:  const Icon(
               Icons.location_on,
               color: Colors.red,
               size: 40.0,
             ),
           ),
         );
-        polygonPoints.add(latlng);
 
         if (polygonPoints.length > 2) {
           area = calculatePolygonArea(polygonPoints);
@@ -52,31 +51,29 @@ class _MapScreenState extends State<MapScreen> {
         isLoading = true;
       });
     } else {
-      // Otherwise, fetch data for the single point
       setState(() {
-        markers.clear();
-        markers.add(
+        markers = [
           Marker(
             width: 80.0,
             height: 80.0,
-            point: latlng,
-            child: const Icon(
+            point: point,
+            child:  const Icon(
               Icons.location_on,
               color: Colors.red,
               size: 40.0,
             ),
           ),
-        );
+        ];
         isLoading = true;
       });
 
-      await _fetchSoilData(latlng);
+      _fetchSoilData(point);
     }
   }
 
-  Future<void> _fetchSoilData(LatLng latlng) async {
+  Future<void> _fetchSoilData(LatLng point) async {
     final url = Uri.parse(
-        'https://api-test.openepi.io/soil/property?lon=${latlng.longitude}&lat=${latlng.latitude}&depths=0-5cm&depths=100-200cm&properties=bdod&properties=phh2o&values=mean&values=Q0.05');
+        'https://api-test.openepi.io/soil/property?lon=${point.longitude}&lat=${point.latitude}&depths=0-5cm&depths=100-200cm&properties=bdod&properties=phh2o&values=mean&values=Q0.05');
 
     try {
       final response = await http.get(url);
@@ -96,7 +93,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  // Function to get user's current location with permission handling
   Future<void> _getCurrentLocation() async {
     try {
       PermissionStatus permission = await Permission.location.status;
@@ -117,7 +113,7 @@ class _MapScreenState extends State<MapScreen> {
             width: 80.0,
             height: 80.0,
             point: userLocation,
-            child: const Icon(
+            child:  const Icon(
               Icons.my_location,
               color: Colors.blue,
               size: 40.0,
@@ -148,7 +144,7 @@ class _MapScreenState extends State<MapScreen> {
             options: MapOptions(
               initialCenter: const LatLng(22.9006, 89.5024),
               initialZoom: 13.0,
-              onTap: (tapPosition, latlng) => _handleTap(latlng),
+              onTap: _handleTap,
             ),
             children: [
               TileLayer(
@@ -188,7 +184,7 @@ class _MapScreenState extends State<MapScreen> {
                   },
                   backgroundColor: isPolygonMode ? Colors.green : Colors.grey,
                   heroTag: 'polygonToggle',
-                  child:  Icon(Icons.area_chart_outlined),
+                  child: const Icon(Icons.area_chart_outlined),
                 ),
                 const SizedBox(height: 10),
                 FloatingActionButton(
@@ -222,7 +218,7 @@ class _MapScreenState extends State<MapScreen> {
             polygonPoints.clear();
             area = 0.0;
             perimeter = 0.0;
-            soilData = null; // Clear soil data
+            soilData = null;
           });
         },
         backgroundColor: Colors.red,
