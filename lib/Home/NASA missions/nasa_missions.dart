@@ -1,4 +1,9 @@
+import 'package:agro_nova_app/Home/NASA%20missions/aqua.dart';
+import 'package:agro_nova_app/Home/NASA%20missions/gpm.dart';
+import 'package:agro_nova_app/Home/NASA%20missions/grace.dart';
 import 'package:agro_nova_app/Home/NASA%20missions/landsat.dart';
+import 'package:agro_nova_app/Home/NASA%20missions/modis.dart';
+import 'package:agro_nova_app/Home/NASA%20missions/smap.dart';
 import 'package:flutter/material.dart';
 import 'mission_card.dart';
 
@@ -71,26 +76,56 @@ class NasaMissions extends StatelessWidget {
               );
             },
           ),
-          _missionButton('Voyager', Colors.red, () {
-            print('Voyager tapped');
-            // Add your onTap action here
-          }),
-          _missionButton('Hubble', Colors.cyan, () {
-            print('Hubble tapped');
-            // Add your onTap action here
-          }),
-          _missionButton('Curiosity', Colors.deepOrange, () {
-            print('Curiosity tapped');
-            // Add your onTap action here
-          }),
-          _missionButton('Artemis', Colors.deepPurple, () {
-            print('Artemis tapped');
-            // Add your onTap action here
-          }),
-          _missionButton('Perseverance', Colors.pinkAccent, () {
-            print('Perseverance tapped');
-            // Add your onTap action here
-          }),
+          _missionButton(
+            'SMAP',
+            Colors.red,
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Smap()),
+              );
+            },
+          ),
+          _missionButton(
+            'AQUA',
+            Colors.cyan,
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Aqua()),
+              );
+            },
+          ),
+          _missionButton(
+            'GPM',
+            Colors.deepOrange,
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Gpm()),
+              );
+            },
+          ),
+          _missionButton(
+            'GEACE',
+            Colors.deepPurple,
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Grace()),
+              );
+            },
+          ),
+          _missionButton(
+            'MODIS',
+            Colors.pinkAccent,
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Modis()),
+              );
+            },
+          ),
         ],
       ),
     );

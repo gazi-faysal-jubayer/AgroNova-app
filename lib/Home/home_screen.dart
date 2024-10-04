@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
               FarminovaCard(
                 imagePath: 'assets/image/farminova.png', // Your background image path
                 buttonText: 'Open Figma',
-                figmaLink: 'https://www.figma.com/proto/fvWPrQpBqvr5v2Hp5TTp0Y/Agronova-Main?node-id=2063-3145&t=f4Mjg1sBYCPEPUg7-1&starting-point-node-id=3%3A72',
+                figmaLink: 'https://www.figma.com/proto/mcdizEPdS3OUVUAvIDqXtU/FarmiNova?page-id=0%3A1&node-id=1-2062&node-type=canvas&viewport=-8553%2C-6973%2C0.94&t=12LXlEdpozjgift9-1&scaling=scale-down&content-scaling=fixed',
               ),
               const SizedBox(height: 20),
             ],
