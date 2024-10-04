@@ -1,4 +1,5 @@
 import 'package:agro_nova_app/Home/NASA%20missions/landsat.dart';
+import 'package:agro_nova_app/Home/NASA%20missions/smap.dart';
 import 'package:flutter/material.dart';
 import 'mission_card.dart';
 
@@ -71,10 +72,16 @@ class NasaMissions extends StatelessWidget {
               );
             },
           ),
-          _missionButton('Voyager', Colors.red, () {
-            print('Voyager tapped');
-            // Add your onTap action here
-          }),
+          _missionButton(
+            'SMAP',
+            Colors.red,
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Smap()),
+              );
+            },
+          ),
           _missionButton('Hubble', Colors.cyan, () {
             print('Hubble tapped');
             // Add your onTap action here
